@@ -54,7 +54,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (filter_var($_POST["email1"], FILTER_VALIDATE_EMAIL)) {
             //  on parcour le tableau pour ensuite vérifier si l'émail existe déjà
             foreach ($_SESSION["ListUser"] as $i) {
-                if (in_array($_POST["email1"), $tab[$i]["mail"])) {
+                if (in_array($_POST["email1"], $tab[$i]["mail"])) {
                     $mailValid = false;
                     $error = "Mail déjà utilisé";
                     break;

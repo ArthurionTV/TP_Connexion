@@ -18,7 +18,8 @@ session_start();
 
 <?php
 // inclure la barre nav (boutons) en haut de la page 
-include "nav.php";   
+include "nav.php";
+$user = unserialize($_SESSION["user"]);
 
 // Si aucune variable de session auth, on l'a crée à la valeur false
 if (!isset($_SESSION["auth"])) {
@@ -40,7 +41,7 @@ if (isset($_SESSION["ListUser"])) {
 ?>
 
 <body>            <!-- on affiche la case la valeur 2 de la clé "user" -->         
-    <h1>Bienvenue <?php echo htmlspecialchars($_SESSION["user"][2]); ?> !</h1>
+    <h1>Bienvenue <?=$user->getPseudo(); ?> !</h1>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-U1DAWAznBHeqEIlVSCgzq+c9gqGAJn5c/t99JyeKa9xxaYpSvHU5awsuZVVFIhvj" crossorigin="anonymous"></script>
 </body>
 

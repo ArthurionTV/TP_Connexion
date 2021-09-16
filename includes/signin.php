@@ -56,7 +56,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 if (password_verify($_POST["password1"], $tab[$i]["password"])) {
                     // si la session est valide on se connecte dessus
                     $_SESSION["auth"] = true;
-                    $_SESSION["user"] = $i;
+                    $user = new User($tab[$i]);
+                    $_SESSION["user"] = serialize($user);
                     // renvoie sur la page d'accueil 
                     header("Location: ./index.php");
                 } else {
