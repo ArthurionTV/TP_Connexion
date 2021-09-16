@@ -43,6 +43,8 @@ session_start();
 </html>
 
 <?php
+//initialiser le tableau $tab
+$tab = $_SESSION["ListUser"];
 // requête serveur 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     //  on vérifie si les champs sont remplis
@@ -52,7 +54,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (filter_var($_POST["email1"], FILTER_VALIDATE_EMAIL)) {
             //  on parcour le tableau pour ensuite vérifier si l'émail existe déjà
             foreach ($_SESSION["ListUser"] as $i) {
-                if (in_array($_POST["email1"], $i)) {
+                if (in_array($_POST["email1"), $tab[$i]["mail"])) {
                     $mailValid = false;
                     $error = "Mail déjà utilisé";
                     break;
@@ -61,8 +63,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // si l'email est valide et disponible, on vérifie ensuite les mots de passes 
             if ($mailValid == true) {
                 if ($_POST["password1"] === $_POST["password2"]) {
-                    // si l'email est valide et les 2 mdp identiques alors les données sont stockés dans le tableau "ListUser"
-                    array_push($_SESSION["ListUser"], [$_POST["email1"], password_hash($_POST["password1"], PASSWORD_DEFAULT), htmlspecialchars($_POST["username1"])]);
+                    //enregistrement de l'utilisateur dans le tableau
+                    $tab[] = [
+                        $_POST["mail"],
+                        password_hash($_POST["password"], PASSWORD_DEFAULT),
+                        htmlspecialchars($_POST["pseudo"])
+                    ];
+                    $_SESSION["ListUser"] = $tab;
                     // redirection à la page d'accueil
                     header("Location: ./index.php");
                 } else {

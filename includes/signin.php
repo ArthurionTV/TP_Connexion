@@ -40,6 +40,8 @@ session_start();
 </html>
 
 <?php
+//initialiser le tableau $tab
+$tab = $_SESSION["ListUser"];
 // envois de la requête serveur
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     // check si les champs sont remplis
@@ -49,9 +51,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             // on déclare vide la variable d'erreur                        
             $error = "";
             // comparer mail                                         
-            if ($_POST["email1"] === $i[0]) {
+            if ($_POST["email1"] === $tab[$i]["mail"]) {
                 // verifier mdp                      
-                if (password_verify($_POST["password1"], $i[1])) {
+                if (password_verify($_POST["password1"], $tab[$i]["password"])) {
                     // si la session est valide on se connecte dessus
                     $_SESSION["auth"] = true;
                     $_SESSION["user"] = $i;

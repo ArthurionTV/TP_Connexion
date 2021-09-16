@@ -8,7 +8,7 @@ const DBS_PASS = 'sangohan';
 
 function connectDBS()
 {
-  //Connexion à la base
+  //Connexion à la base de données
   try {
     $bdd = new PDO(
       'mysql:host=' . DBS_HOST . ';
