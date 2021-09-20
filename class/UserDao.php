@@ -1,6 +1,6 @@
 <?php
-
-//fonction servant à ajouter un utilisateur dans la base
+class UserDao {
+//ajouter un utilisateur dans la base
 public function add(User $user){
     $q = $this->_db->prepare('INSERT INTO
     user (mail, pseudo, password)
@@ -11,7 +11,7 @@ public function add(User $user){
     $q->execute();
 }
 
-//fonction servant à mettre à jour l'utilisateur
+//mettre à jour l'utilisateur
 public function update(User $user) {
     $q = $this->_db->prepare('UPDATE user
     SET mail = :mail,pseudo = :pseudo, password = :password
@@ -23,21 +23,21 @@ public function update(User $user) {
     $q->execute();
 }
 
-//fonction servant à supprimer un utilisateur 
+//supprimer un utilisateur 
 public function delete(Int $id) {
     $this->_db->exec('DELETE FROM user WHERE id = '.$id);
 }
 
-//fonction servant à récup tous les utilisateurs de la table user
+//récup tous les utilisateurs de la table user
 public function getAll() {
     $q = $this->_db->query('SELECT * FROM user');
     return $q->fetchAll(PDO::FETCH_CLASS, User::class);
 }
 
-//fonction servant à récup un utilisateur en particulier
+//récup un utilisateur en particulier
 public function get($id) {
     $id = (int) $id;
     $q = $this->_db->query('SELECT * FROM user WHERE id = '.$id);
     return $q->fetchObject(User::class);
 }
-?>
+}

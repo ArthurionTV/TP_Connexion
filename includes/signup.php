@@ -3,7 +3,7 @@
 
 <?php
 session_start();
-public class = UserDAO();
+require 'UserDao.php';
 ?>
 
 <head>
@@ -73,6 +73,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $_SESSION["ListUser"] = $tab;
                     //instanciation de l'objet user
                     $user = $user[$tab];
+                    $user = new UserDao();
                     // redirection à la page d'accueil
                     header("Location: ./index.php");
                 } else {

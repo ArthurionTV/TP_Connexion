@@ -5,6 +5,14 @@ class User{
     public $mail;
     public $pseudo ;
     public $password;
+
+public function __construct()
+{
+    public function getmail();
+    public function getpseudo();
+    public function getpassword();
+    public function getid();
+}
 }
 
 ?>
