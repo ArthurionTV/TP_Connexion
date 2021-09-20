@@ -3,6 +3,7 @@
 
 <?php
 session_start();
+public class = UserDAO();
 ?>
 
 <head>
@@ -64,12 +65,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if ($mailValid == true) {
                 if ($_POST["password1"] === $_POST["password2"]) {
                     //enregistrement de l'utilisateur dans le tableau
-                    $tab[] = [
+                    $tab = [
                         $_POST["mail"],
                         password_hash($_POST["password"], PASSWORD_DEFAULT),
                         htmlspecialchars($_POST["pseudo"])
                     ];
                     $_SESSION["ListUser"] = $tab;
+                    //instanciation de l'objet user
+                    $user = $user[$tab];
                     // redirection à la page d'accueil
                     header("Location: ./index.php");
                 } else {

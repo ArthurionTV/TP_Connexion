@@ -17,6 +17,8 @@ session_start();
 <?php
 include "nav.php";
 
+//Récupération de l'objet user en session
+$user = unserialize($_SESSION["user"]);
 $error = "";
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
