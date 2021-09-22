@@ -41,7 +41,7 @@ session_start();
 
 <?php
 //initialiser le tableau $tab
-$tab = $_SESSION["ListUser"];
+$tab = $UserDao->getAll();
 // envois de la requête serveur
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     // check si les champs sont remplis
@@ -51,9 +51,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             // on déclare vide la variable d'erreur                        
             $error = "";
             // comparer mail                                         
-            if ($_POST["email1"] === $tab[$i]["mail"]) {
+            if ($_POST["email1"] === $tab[$i]->getMail()) {
                 // verifier mdp                      
-                if (password_verify($_POST["password1"], $tab[$i]["password"])) {
+                if (password_verify($_POST["password1"], $tab[$i]->getPassword())) {
                     // si la session est valide on se connecte dessus
                     $_SESSION["auth"] = true;
                     $user = new User($tab[$i]);
