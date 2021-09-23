@@ -3,6 +3,8 @@
 
 <?php
 session_start();
+include '../config/autoload.php';
+include './connexion_bdd.php';
 ?>
 
 <head>
@@ -25,21 +27,22 @@ $User = [];
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     if (!empty($_POST["username1"]) && !empty($_POST["email1"])) {
         if (filter_var($_POST["email1"], FILTER_VALIDATE_EMAIL)) {
-            foreach ($_SESSION["ListUser"] as $cle => $i) {
-                if ($_SESSION['user'] !== $i) {
-                    if ($_POST['username1'] === $i[2]) {
-                        $error = "Nom d\'utilisateur indisponible";
-                    }
-                    if ($_POST['email1'] === $i[0]) {
-                        $error = "Mail indisponible";
-                    }
-                } else {
-                    $key = $cle;
-                }
+            //s'il n'y a pas d'erreur de mot de passe, on update
+            if ($error == "") {
+                // on ajoute l'id au tableau utilisateur temporaire
+                $user["id"] = $user->getId();
+                // on instancie un nouvel utilisateur
+                $userUpdate = new User($user);
+                // on update l'utilisateur
+                $userDao->update($userUpdate);
+                // on met à jour $User pour l'affichage
+                $User = $userUpdate;
+                // on met à jour l'utilisateur dans la session
+                $_SESSION["user"] = serialize($userUpdate);
             }
             if (empty($error)) {
-                $_SESSION['user'][2] = $_POST['username1'];
-                $_SESSION['user'][0] = $_POST['email1'];
+                $user["pseudo"] = $_POST['username1'];
+                $user["mail"] = $_POST['email1'];
                 $_SESSION["ListUser"][$key] = $_SESSION["user"];
             }
             // Si les mots de passe ne sont pas vides

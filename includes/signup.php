@@ -3,7 +3,8 @@
 
 <?php
 session_start();
-require '../class/UserDao.php';
+include '../config/autoload.php';
+include './connexion_bdd.php';
 ?>
 
 <head>

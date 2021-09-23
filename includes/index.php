@@ -3,6 +3,8 @@
 
 <?php
 session_start();  
+include '../config/autoload.php';
+include './connexion_bdd.php';
 ?>
 
 <head>
@@ -17,7 +19,7 @@ session_start();
 </head>
 
 <?php
-// inclure la barre nav (boutons) en haut de la page 
+// inclure la barre nav
 include "nav.php";
 $user = unserialize($_SESSION["user"]);
 
@@ -31,13 +33,13 @@ if ($_SESSION["auth"] == false) {
    header("Location: ./signin.php");   
 }
 
-// Si il existe un tableau "user" dans le tableau session, le stocker dans $tab
+/* Si il existe un tableau "user" dans le tableau session, le stocker dans $tab
 if (isset($_SESSION["ListUser"])) {
     $tab = $_SESSION["ListUser"];
 } else {  // S'il n'existe pas, on le crée
     $tab = [];
     $_SESSION["ListUser"] = $tab;  // Stockage de $tab en session
-}
+}*/
 ?>
 
 <body>            <!-- on affiche la case la valeur 2 de la clé "user" -->         
