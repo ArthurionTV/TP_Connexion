@@ -42,7 +42,7 @@ include './connexion_bdd.php';
 </html>
 
 <?php
-$UserDao = ($User);
+$UserDao = new UserDao($db);
 //initialiser le tableau $tab et récupérer tous les utilisateurs de la BDD
 $tab = $UserDao->getAll();
 // envois de la requête serveur
@@ -63,7 +63,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 header("Location: ./index.php");
             } else {
                 $error = "Mauvais mot de passe";  // message d'erreur
-                
             }
         } else {
             $error = "Le Mail est invalide";  // message d'erreur
