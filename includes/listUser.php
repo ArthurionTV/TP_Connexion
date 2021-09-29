@@ -5,6 +5,7 @@
 session_start();
 include '../config/autoload.php';
 include './connexion_bdd.php';
+include '../config/config.php';
 ?>
 
 <head>
@@ -21,16 +22,16 @@ include "nav.php";
 
 if ($_SERVER["REQUEST_METHOD"] === "GET") {
     //parcourir le tableau ListUser en tant que variable "key" en prennant la valeur de i
-    foreach ($_SESSION["ListUser"] as $key => $i) {
-        // algo de suppression
-        if (isset($_POST["supp"])) {
-            //suppression de l'utilisateur
-            $userDao->delete($_POST["supp"]);
-            // récup du tab utilisateur à jour
-            $tab = $userDao->getAll();
-        }
+
+    // algo de suppression
+    if (isset($_GET["supp"])) {
+        //suppression de l'utilisateur
+        $userDao->delete($_GET["supp"]);
+        // récup du tab utilisateur à jour
+        $tab = $userDao->getAll();
     }
 }
+
 ?>
 
 <body>
@@ -44,11 +45,13 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
         </thead>
         <tbody>
             <?php
+            $user = unserialize($_SESSION["user"]);
             //parcourir le tableau ListUser en tant que variable "cle" en prennant la valeur de i
-            foreach ($_SESSION["ListUser"] as $value->getId() => $i) {
-                if ($_SESSION["ListUser"][$value->getId()] === $_SESSION["user"]) {
+            foreach ($tab as $value) {
+                if ($value->getId() == $user->getId()) {
             ?>
-                    <tr> <!-- Permet de mettre en couleur la session sur laquelle nous sommmes connecté -->
+                    <tr>
+                        <!-- Permet de mettre en couleur la session sur laquelle nous sommmes connecté -->
                         <td class="table-success"><?php echo $value->getMail(); ?></td>
                         <td class="table-success"><?php echo $value->getPseudo(); ?></td>
                     </tr>
@@ -60,7 +63,7 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
                         <td><?php echo $value->getPseudo(); ?></td>
                         <td>
                             <form method="GET">
-                                <input type="hidden" name="<?php echo $value->getId() ?>">
+                                <input type="hidden" name="supp" value="<?php echo $value->getId() ?>">
                                 <button type="submit" class="btn btn-danger">Supprimer</button>
                             </form>
                         </td>

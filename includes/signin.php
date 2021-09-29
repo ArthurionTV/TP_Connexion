@@ -5,6 +5,7 @@
 session_start();
 include '../config/autoload.php';
 include './connexion_bdd.php';
+include '../config/config.php';
 ?>
 
 <head>
@@ -51,21 +52,24 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     if (!empty($_POST["email1"]) && !empty($_POST["password1"])) {
         // on déclare vide la variable d'erreur                        
         $error = "";
-        // comparer mail                                         
-        if ($_POST["email1"] === $tab[$i]->getMail()) {
-            // verifier mdp                      
-            if (password_verify($_POST["password1"], $tab[$i]->getPassword())) {
-                // si la session est valide on se connecte dessus
-                $_SESSION["auth"] = true;
-                $user = new User($tab[$i]);
-                $_SESSION["user"] = serialize($user);
-                // renvoie sur la page d'accueil 
-                header("Location: ./index.php");
+        // comparer mail
+        for ($i = 0; $i < count($tab); $i++) {
+            # code...
+            if ($_POST["email1"] === $tab[$i]->getMail()) {
+                // verifier mdp                      
+                if (password_verify($_POST["password1"], $tab[$i]->getPassword())) {
+                    // si la session est valide on se connecte dessus
+                    $_SESSION["auth"] = true;
+                    $user = new User($tab[$i]);
+                    $_SESSION["user"] = serialize($user);
+                    // renvoie sur la page d'accueil 
+                    header("Location: ./index.php");
+                } else {
+                    $error = "Mauvais mot de passe";  // message d'erreur
+                }
             } else {
-                $error = "Mauvais mot de passe";  // message d'erreur
+                $error = "Le Mail est invalide";  // message d'erreur
             }
-        } else {
-            $error = "Le Mail est invalide";  // message d'erreur
         }
     } else {
         $error = "Veuillez remplir tous les champs";  // message d'erreur

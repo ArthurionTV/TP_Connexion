@@ -5,6 +5,7 @@
 session_start();
 include '../config/autoload.php';
 include './connexion_bdd.php';
+include '../config/config.php';
 ?>
 
 <head>
@@ -28,29 +29,17 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     if (!empty($_POST["username1"]) && !empty($_POST["email1"])) {
         if (filter_var($_POST["email1"], FILTER_VALIDATE_EMAIL)) {
             //s'il n'y a pas d'erreur de mot de passe, on update
-            if ($error == "") {
-                // on ajoute l'id au tableau utilisateur temporaire
-                $user["id"] = $user->getId();
-                // on instancie un nouvel utilisateur
-                $userUpdate = new User($user);
-                // on update l'utilisateur
-                $userDao->update($userUpdate);
-                // on met à jour $User pour l'affichage
-                $User = $userUpdate;
-                // on met à jour l'utilisateur dans la session
-                $_SESSION["user"] = serialize($userUpdate);
-            }
+
             if (empty($error)) {
-                $user["pseudo"] = $_POST['username1'];
-                $user["mail"] = $_POST['email1'];
-                $_SESSION["ListUser"][$key] = $_SESSION["user"];
+                $User["pseudo"] = $_POST['username1'];
+                $User["mail"] = $_POST['email1'];
             }
             // Si les mots de passe ne sont pas vides
             if ($_POST["password"] != "" && $_POST["passwordConfirm"] != "") {
                 //Si les mots de passe correspondent
                 if ($_POST["password"] == $_POST["passwordConfirm"]) {
                     // on stock le mot de passe dans $user[1]
-                    $user[1] = password_hash($_POST["password"], PASSWORD_DEFAULT);
+                    $User["password"] = password_hash($_POST["password"], PASSWORD_DEFAULT);
                     // Sinon
                 } else {
                     // on stock un message d'erreur
@@ -60,8 +49,20 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 // Sinon
             } else {
                 // on stock le mot de passe de session dans $user[1]
-                $user[1] = $user->getPassword();
+                $User["password"] = $user->getPassword();
                 //fin si
+            }
+            if ($error == "") {
+                // on ajoute l'id au tableau utilisateur temporaire
+                $User["id"] = $user->getId();
+                // on instancie un nouvel utilisateur
+                $userUpdate = new User($user);
+                // on update l'utilisateur
+                $userDao->update($userUpdate);
+                // on met à jour $User pour l'affichage
+                $user = $userUpdate;
+                // on met à jour l'utilisateur dans la session
+                $_SESSION["user"] = serialize($userUpdate);
             }
         } else {
             $error = "Mail invalide";
@@ -79,22 +80,22 @@ if (!empty($error)) {
     <h1>Votre Profil</h1>
     <form method="POST">
         <div class="mb-3">
-            <label for="exampleInputEmail1" id="disline" class="form-label">Nom d'utilisateur : </label>
-            <input type="text" class="form-control" name="username1" value="<?php echo htmlspecialchars($_SESSION["user"][2]); ?>" id="exampleInputEmail1" aria-describedby="emailHelp">
+            <label for="exampleInputEmail1" id="disline" class="form-label">Nom d'utilisateur</label>
+            <input type="text" class="form-control" name="username1" value="<?php echo htmlspecialchars($user->getpseudo()); ?>" id="exampleInputEmail1" aria-describedby="emailHelp">
         </div>
         <div class="mb-3">
-            <label for="exampleInputEmail1" id="disline" class="form-label">Adresse Mail : </label>
-            <input type="text" class="form-control" name="email1" value="<?php echo $_SESSION["user"][0]; ?>" id="exampleInputEmail1" aria-describedby="emailHelp">
-            <button type="submit" id="btnmodif" class="btn btn-primary">modifier et enregistrer</button>
+            <label for="exampleInputEmail1" id="disline" class="form-label">Adresse Mail</label>
+            <input type="text" class="form-control" name="email1" value="<?php echo $user->getMail(); ?>" id="exampleInputEmail1" aria-describedby="emailHelp">
         </div>
         <div class="form-group">
-            <label for="password">Password</label>
+            <label for="password">Nouveau mdp</label>
             <input type="password" name="password" class="form-control" id="password">
         </div>
         <div class="form-group">
-            <label for="passwordConfirm">Password 2</label>
+            <label for="passwordConfirm">Confirmez mdp</label>
             <input type="password" name="passwordConfirm" class="form-control" id="passwordConfirm">
         </div>
+        <button type="submit" id="btnmodif" class="btn btn-primary">modifier et enregistrer</button>
     </form>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-U1DAWAznBHeqEIlVSCgzq+c9gqGAJn5c/t99JyeKa9xxaYpSvHU5awsuZVVFIhvj" crossorigin="anonymous"></script>
 </body>

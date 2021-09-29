@@ -2,9 +2,10 @@
 <html lang="fr">
 
 <?php
-session_start();  
+session_start();
 include '../config/autoload.php';
 include './connexion_bdd.php';
+include '../config/config.php';
 ?>
 
 <head>
@@ -14,7 +15,7 @@ include './connexion_bdd.php';
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- lier le CSS -->
-    <link rel="stylesheet" href="./index.css">  
+    <link rel="stylesheet" href="./index.css">
     <title>Bienvenue</title>
 </head>
 
@@ -30,20 +31,18 @@ if (!isset($_SESSION["auth"])) {
 
 // Si l'on n'est pas connecté à un compte, on redirige vers la connexion
 if ($_SESSION["auth"] == false) {
-   header("Location: ./signin.php");   
+    header("Location: ./signin.php");
 }
 
-/* Si il existe un tableau "user" dans le tableau session, le stocker dans $tab
-if (isset($_SESSION["ListUser"])) {
-    $tab = $_SESSION["ListUser"];
-} else {  // S'il n'existe pas, on le crée
-    $tab = [];
-    $_SESSION["ListUser"] = $tab;  // Stockage de $tab en session
-}*/
+//gestion de deco
+if (isset($_GET["deco"])) {
+    header("Location: ./signin.php");
+}
 ?>
 
-<body>            <!-- on affiche la case la valeur 2 de la clé "user" -->         
-    <h1>Bienvenue <?=$user->getPseudo(); ?> !</h1>
+<body>
+    <!-- on affiche la case la valeur 2 de la clé "user" -->
+    <h1>Bienvenue <?= $user->getPseudo(); ?> !</h1>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-U1DAWAznBHeqEIlVSCgzq+c9gqGAJn5c/t99JyeKa9xxaYpSvHU5awsuZVVFIhvj" crossorigin="anonymous"></script>
 </body>
 

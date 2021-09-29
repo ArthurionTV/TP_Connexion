@@ -5,6 +5,7 @@
 session_start();
 include '../config/autoload.php';
 include './connexion_bdd.php';
+include '../config/config.php';
 ?>
 
 <head>
@@ -76,10 +77,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         "password" => password_hash($_POST["password1"], PASSWORD_DEFAULT),
                         "pseudo" => htmlspecialchars($_POST["username1"])
                     ];
-                    var_dump($tab);
                     //instanciation de l'objet user
                     $user = new User($tab);
-                    var_dump($user);
                     $userDao->add($user);
                     // redirection à la page d'accueil
                     header("Location: ./index.php");
